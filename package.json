@@ -1,0 +1,27 @@
+{
+  "name": "nodejsrestapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV:development node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gilsantosjulian/nodejsrestapi.git"
+  },
+  "author": "Julian Gil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gilsantosjulian/nodejsrestapi/issues"
+  },
+  "homepage": "https://github.com/gilsantosjulian/nodejsrestapi#readme",
+  "dependencies": {
+    "cross-env": "^6.0.3",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
