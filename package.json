@@ -23,7 +23,8 @@
     "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "helmet": "^3.21.2",
-    "mongoose": "^5.8.3"
+    "mongoose": "^5.8.3",
+    "validator": "^12.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
