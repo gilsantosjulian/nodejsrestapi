@@ -1,7 +1,10 @@
 import express from 'express';
 import constants from '../config/constants';
-const app = express();
+import '../config/database';
+import middlewareConfig from '../config/middleware';
+const app = express(); //passing the app instance to middlewareConfig 
 
+middlewareConfig(app);
 app.listen(constants.PORT, err => {
   if (err) {
     throw err;
