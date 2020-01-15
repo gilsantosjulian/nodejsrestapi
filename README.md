@@ -1,3 +1,20 @@
+# REST API - MongoDB - Passport - JWT
+
+Boilerplate for REST API using MongoDB, passport authentication and JWT.
+
+## Requirements
+
+- Recent version of _node_. It is recommend to install _node_ using [nvm](https://github.com/creationix/nvm).
+
+## Getting started
+
+1.  Clone the repository (git clone git@github.com:gilsantosjulian/nodejsrestapi.git).
+2.  Run `npm install` to install dependencies.
+3.  Run `npm run dev:build` to build the project.
+4.  In a different shell, r `npm run dev` to run development server.
+5.  Call to [localhost:3000](http://localhost:3000) to view the runing the API.
+6.  Define an enviroment variable NODE_ENV=development on your .bash_profile (OSx or linux).
+
 ## Install MongoDB on macOS
 
 ### Install Homebrew
