@@ -4,12 +4,14 @@ const defaultConfig = {
 
 const devConfig = {
   MONGO_URL: 'mongodb://localhost/makeanodejsapi-dev',
+  JWT_SECRET: 'thisisasecret',
 };
 const testConfig = {
   MONGO_URL: 'mongodb://localhost/makeanodejsapi-test',
 };
 const prodConfig = {
   MONGO_URL: 'mongodb://localhost/makeanodejsapi-prod',
+  JWT_SECRET: 'thisisasecret',
 };
 
 const envConfig = (env) => {
