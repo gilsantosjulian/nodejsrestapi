@@ -1,6 +1,13 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, {
+  Schema
+} from 'mongoose';
+import jwt from 'jsonwebtoken';
+import constants from '../../../config/constants';
 
-import { hashSync, compareSync } from 'bcrypt-nodejs';
+import {
+  hashSync,
+  compareSync,
+} from 'bcrypt-nodejs';
 
 import validator from 'validator';
 // import {
@@ -23,18 +30,18 @@ const UserSchema = new Schema({
   firstName: {
     type: String,
     required: [true, 'FirstName is required!'],
-    trim: true
+    trim: true,
   },
   lastName: {
     type: String,
     required: [true, 'LastName is required!'],
-    trim: true
+    trim: true,
   },
   userName: {
     type: String,
     required: [true, 'UserName is required!'],
     trim: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -47,10 +54,10 @@ const UserSchema = new Schema({
     //   // },
     //   message: '{VALUE} is not a valid password!',
     // },
-  }
+  },
 });
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   if (this.isModified('password')) {
     this.password = this._hashPassword(this.password);
   }
@@ -62,7 +69,21 @@ UserSchema.methods = {
   },
   authenticateUser(password) {
     return compareSync(password, this.password);
-  }
+  },
+  createToken() {
+    return jwt.sign({
+        _id: this._id,
+      },
+      constants.JWT_SECRET,
+    );
+  },
+  toJSON() {
+    return {
+      _id: this._id,
+      userName: this.userName,
+      token: `JWT ${this.createToken()}`,
+    };
+  },
 };
 
 export default mongoose.model('User', UserSchema);
