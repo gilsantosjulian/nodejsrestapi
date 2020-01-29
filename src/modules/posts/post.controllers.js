@@ -9,3 +9,12 @@ export async function createPost(req, res) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
   }
 }
+
+export async function getPostById(req, res) {
+  try {
+    const post = await Post.findById(req.params.id);
+    return res.status(HTTPStatus.OK).json(post);
+  } catch (e) {
+    return res.status(HTTPStatus.BAD_REQUEST).json(e);
+  }
+}
