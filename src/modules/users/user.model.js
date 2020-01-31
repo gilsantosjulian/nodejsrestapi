@@ -1,15 +1,14 @@
 import mongoose, {
-  Schema
+  Schema,
 } from 'mongoose';
+import validator from 'validator';
 import jwt from 'jsonwebtoken';
-import constants from '../../../config/constants';
-
 import {
   hashSync,
   compareSync,
 } from 'bcrypt-nodejs';
+import constants from '../../../config/constants';
 
-import validator from 'validator';
 // import {
 //   passwordReg
 // } from './user.validations';
@@ -24,8 +23,8 @@ const UserSchema = new Schema({
       validator(email) {
         return validator.isEmail(email);
       },
-      message: '{VALUE} is not a valid email!'
-    }
+      message: '{VALUE} is not a valid email!',
+    },
   },
   firstName: {
     type: String,
@@ -47,7 +46,7 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Password is required!'],
     trim: true,
-    minlength: [6, 'Password need to be longer!']
+    minlength: [6, 'Password need to be longer!'],
     // validate: {
     //   // validator(password) {
     //   //   return passwordReg.test(password);
@@ -72,16 +71,22 @@ UserSchema.methods = {
   },
   createToken() {
     return jwt.sign({
-        _id: this._id,
-      },
-      constants.JWT_SECRET,
+      _id: this._id,
+    },
+    constants.JWT_SECRET,
     );
+  },
+  toAuthJSON() {
+    return {
+      _id: this._id,
+      userName: this.userName,
+      token: `JWT ${this.createToken()}`,
+    };
   },
   toJSON() {
     return {
       _id: this._id,
       userName: this.userName,
-      token: `JWT ${this.createToken()}`,
     };
   },
 };
