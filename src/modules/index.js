@@ -1,7 +1,8 @@
 import userRoutes from './users/user.routes';
 import postRoutes from './posts/post.routes';
 import {
-  authJwt
+  authJwt,
+
 } from '../services/auth.services';
 
 export default app => {
