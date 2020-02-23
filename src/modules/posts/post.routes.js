@@ -1,22 +1,28 @@
-import {
-  Router,
-} from 'express';
+import { Router } from 'express';
 import validate from 'express-validation';
 import * as postController from './post.controllers';
-import {
-  authJwt,
-} from '../../services/auth.services';
+import { authJwt } from '../../services/auth.services';
 import postValidation from './post.validations';
 
 const routes = new Router();
 
 routes.get('/', postController.getPostsList);
 
-routes.post('/', authJwt, validate(postValidation.createPost), postController.createPost);
+routes.post(
+  '/',
+  authJwt,
+  validate(postValidation.createPost),
+  postController.createPost,
+);
 
 routes.get('/:id', postController.getPostById);
 
-routes.patch('/:id', authJwt, validate(postValidation.updatePost), postController.updatePost);
+routes.patch(
+  '/:id',
+  authJwt,
+  validate(postValidation.updatePost),
+  postController.updatePost,
+);
 
 routes.delete('/:id', authJwt, postController.deletePost);
 

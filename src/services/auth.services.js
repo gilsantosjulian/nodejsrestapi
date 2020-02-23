@@ -1,21 +1,18 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import {
-  Strategy as JWTStrategy,
-  ExtractJwt
-} from 'passport-jwt';
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../modules/users/user.model';
 import constants from '../../config/constants';
 
 const localOpts = {
-  usernameField: 'email'
+  usernameField: 'email',
 };
 const localStrategy = new LocalStrategy(
   localOpts,
   async (email, password, done) => {
     try {
       const user = await User.findOne({
-        email
+        email,
       });
       if (!user) {
         return done(null, false);
@@ -26,13 +23,13 @@ const localStrategy = new LocalStrategy(
     } catch (e) {
       return done(e, false);
     }
-  }
+  },
 );
 
 // Jwt strategy
 const jwtOpts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
-  secretOrKey: constants.JWT_SECRET
+  secretOrKey: constants.JWT_SECRET,
 };
 
 const jwtStrategy = new JWTStrategy(jwtOpts, async (payload, done) => {
@@ -53,8 +50,8 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 export const authLocal = passport.authenticate('local', {
-  session: false
+  session: false,
 });
 export const authJwt = passport.authenticate('jwt', {
-  session: false
+  session: false,
 });

@@ -1,10 +1,6 @@
-import {
-  Router,
-} from 'express';
+import { Router } from 'express';
 import validate from 'express-validation';
-import {
-  authLocal,
-} from '../../services/auth.services';
+import { authLocal } from '../../services/auth.services';
 import * as userController from './user.controllers';
 import userValidation from './user.validations';
 

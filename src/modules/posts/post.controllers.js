@@ -59,4 +59,3 @@ export const deletePost = async (req, res) => {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
   }
 };
-
