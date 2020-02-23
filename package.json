@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prettier": "prettier --single-quote --print-width 80 --trailing-comma all --write 'src/**/*.js'",
     "clean": "rimraf dist",
     "dev:build": "npm run clean && webpack -w",
     "dev": "cross-env NODE_ENV=development nodemon dist/index.bundle.js"
@@ -46,6 +47,7 @@
     "eslint": "^6.8.0",
     "eslint-config-equimper": "^2.2.2",
     "morgan": "^1.9.1",
+    "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
