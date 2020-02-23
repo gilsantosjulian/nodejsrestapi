@@ -1,12 +1,7 @@
-import mongoose, {
-  Schema,
-} from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
-import {
-  hashSync,
-  compareSync,
-} from 'bcrypt-nodejs';
+import { hashSync, compareSync } from 'bcrypt-nodejs';
 import constants from '../../../config/constants';
 
 // import {
@@ -56,7 +51,7 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function(next) {
   if (this.isModified('password')) {
     this.password = this._hashPassword(this.password);
   }
@@ -70,10 +65,11 @@ UserSchema.methods = {
     return compareSync(password, this.password);
   },
   createToken() {
-    return jwt.sign({
-      _id: this._id,
-    },
-    constants.JWT_SECRET,
+    return jwt.sign(
+      {
+        _id: this._id,
+      },
+      constants.JWT_SECRET,
     );
   },
   toAuthJSON() {

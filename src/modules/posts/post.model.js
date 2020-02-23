@@ -31,7 +31,7 @@ const PostSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 PostSchema.plugin(uniqueValidator, {
