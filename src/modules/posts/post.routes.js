@@ -18,4 +18,6 @@ routes.get('/:id', postController.getPostById);
 
 routes.patch('/:id', authJwt, validate(postValidation.updatePost), postController.updatePost);
 
+routes.delete('/:id', authJwt, postController.deletePost);
+
 export default routes;
