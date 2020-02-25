@@ -38,7 +38,7 @@ PostSchema.plugin(uniqueValidator, {
   message: '{VALUE} already taken!',
 });
 
-PostSchema.pre('validate', function (next) {
+PostSchema.pre('validate', function(next) {
   this._slugify();
 
   next();
