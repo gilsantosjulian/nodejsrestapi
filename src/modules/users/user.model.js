@@ -3,6 +3,7 @@ import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import constants from '../../../config/constants';
+import Post from '../posts/post.model';
 
 // import {
 //   passwordReg
@@ -57,6 +58,7 @@ UserSchema.pre('save', function(next) {
   }
   return next();
 });
+
 UserSchema.methods = {
   _hashPassword(password) {
     return hashSync(password);
@@ -85,6 +87,16 @@ UserSchema.methods = {
       userName: this.userName,
     };
   },
+  _favorites: {
+    async posts(postId) {
+      if (this.favorites.posts.indexOf(postId) >= 0) {
+        this.favorites.posts.remove(postId);
+      } else {
+        this.favorites.posts.push(postId);
+      }
+      return this.save();
+    }
+  }
 };
 
 export default mongoose.model('User', UserSchema);
