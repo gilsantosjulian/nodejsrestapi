@@ -34,7 +34,25 @@ export const getPostsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 0);
   const skip = parseInt(req.query.skip, 0);
   try {
-    const posts = await Post.list({ limit, skip });
+    const promise = await Promise.all([
+      User.findById(req.user._id),
+      Post.list({
+        limit,
+        skip
+      })
+    ]);
+
+    const posts = promise[1].reduce((arr, post) => {
+      const favorite = promise[0]._favorites.isPostIsFavorite(post._id);
+
+      arr.push({
+        ...post.toJSON(),
+        favorite
+      });
+
+      return arr;
+    }, []);
+
     return res.status(HTTPStatus.OK).json(posts);
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
