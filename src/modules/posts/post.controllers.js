@@ -11,14 +11,24 @@ export const createPost = async (req, res) => {
   }
 };
 
-export const getPostById = async (req, res) => {
+export const getPostById = async (req, res) => {  
   try {
-    const post = await Post.findById(req.params.id).populate('user');
-    return res.status(HTTPStatus.OK).json(post);
+    const promise = await Promise.all([
+      User.findById(req.user._id),
+      Post.findById(req.params.id).populate('user')
+    ]);
+
+    const favorite = promise[0]._favorites.isPostIsFavorite(req.params.id);
+    const post = promise[1];
+
+    return res.status(HTTPStatus.OK).json({
+      ...post.toJSON(),
+      favorite
+    });
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
   }
-};
+}
 
 export const getPostsList = async (req, res) => {
   const limit = parseInt(req.query.limit, 0);
