@@ -1,5 +1,6 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
+import FacebookStrategy from 'passport-facebook';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../modules/users/user.model';
 import constants from '../../config/constants';
@@ -48,10 +49,26 @@ const jwtStrategy = new JWTStrategy(jwtOpts, async (payload, done) => {
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
+const { FB_CLIENT_ID, FB_CLIENT_SECRET } = process.env;
+
+passport.use(
+  new FacebookStrategy({
+      clientID: FB_CLIENT_ID,
+      clientSecret: FB_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/api/v1/facebook/auth/callback",
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      return cb(null, profile)
+    }
+  )
+)
 
 export const authLocal = passport.authenticate('local', {
   session: false,
 });
 export const authJwt = passport.authenticate('jwt', {
+  session: false,
+});
+export const facebookAuth = passport.authenticate('facebook', {
   session: false,
 });
