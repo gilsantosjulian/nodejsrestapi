@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 import express from 'express';
-import dotenv from "dotenv";
-import exphbs from "express-handlebars";
+import exphbs from 'express-handlebars';
 import path from "path";
 import constants from '../config/constants';
 import '../config/database';
 import middlewaresConfig from '../config/middleware';
 import apiRoutes from './modules';
+import redisMem from '../src/modules/db/memory';
 
-dotenv.config({ path: path.resolve(__dirname, './.env') });
+redisMem.save('key1', 'test1')
 
 const app = express();
 middlewaresConfig(app);
