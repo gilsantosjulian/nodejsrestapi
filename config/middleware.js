@@ -3,9 +3,11 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import helmet from 'helmet';
 import passport from 'passport';
+import loadEnv from '../config/loadEnv';
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
+loadEnv()
 
 export default app => {
   if (isProd) {
