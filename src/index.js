@@ -6,9 +6,6 @@ import constants from '../config/constants';
 import '../config/database';
 import middlewaresConfig from '../config/middleware';
 import apiRoutes from './modules';
-import redisMem from '../src/modules/db/memory';
-
-redisMem.save('key1', 'test1')
 
 const app = express();
 middlewaresConfig(app);
