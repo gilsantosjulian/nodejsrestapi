@@ -3,7 +3,7 @@ import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { hashSync, compareSync } from 'bcrypt-nodejs';
 import constants from '../../../config/constants';
-import Post from '../posts/post.model';
+import Post from '../db/mongo/posts/post.model';
 
 // import {
 //   passwordReg

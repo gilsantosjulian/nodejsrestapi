@@ -1,10 +1,11 @@
 import HTTPStatus from 'http-status';
-import Post from './post.model';
+import Post from '../db/mongo/posts/post.model';
+import { create } from '../db/mongo/post.service';
 import User from '../users/user.model';
 
 export const createPost = async (req, res) => {
   try {
-    const post = await Post.createPost(req.body, req.user._id);
+    const post = await create(req.body, req.user._id);
     return res.status(HTTPStatus.CREATED).json(post);
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);

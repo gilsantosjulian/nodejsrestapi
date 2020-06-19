@@ -18,12 +18,14 @@ else
   
 
 const save = (key, value) => {  
-  if(client)
-    client.set(key, value, (err, response) => {
-      if (err) console.log('err: ', err);
-      console.log('response: ', response);
-      
+  if(client) {
+    const parsedValue = JSON.stringify(value)
+    client.set(key, parsedValue, (err, response) => {
+      if (err) console.log('[redis:save]: ', err);
+      console.log('[redis:save]: ', response);
+
     })
+  }
 }
 
 const findOne = () => {
