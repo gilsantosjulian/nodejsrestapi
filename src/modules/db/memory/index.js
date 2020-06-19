@@ -28,8 +28,13 @@ const save = (key, value) => {
   }
 }
 
-const findOne = () => {
-
+const findOne = (id) => {
+  if (client) {
+    return client.get(id, (err, response) => {
+      if (err) console.log('[redis:findOne]: ', err);
+      return response
+    })
+  }
 }
 
 const remove = () => {
