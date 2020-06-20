@@ -1,6 +1,6 @@
 import HTTPStatus from 'http-status';
 import Post from '../db/mongo/posts/post.model';
-import { create } from '../db/mongo/post.service';
+import { create, getById } from '../db/mongo/posts/post.service';
 import User from '../users/user.model';
 
 export const createPost = async (req, res) => {
@@ -15,15 +15,14 @@ export const createPost = async (req, res) => {
 export const getPostById = async (req, res) => {  
   try {
     const promise = await Promise.all([
-      User.findById(req.user._id),
-      Post.findById(req.params.id).populate('user')
+      User.findById(req.user._id)
     ]);
 
     const favorite = promise[0]._favorites.isPostIsFavorite(req.params.id);
-    const post = promise[1];
+    const post = await getById(req.params.id)
 
     return res.status(HTTPStatus.OK).json({
-      ...post.toJSON(),
+      ...post,
       favorite
     });
   } catch (e) {
