@@ -1,6 +1,6 @@
 import HTTPStatus from 'http-status';
 import Post from '../db/mongo/posts/post.model';
-import { create, getById } from '../db/mongo/posts/post.service';
+import { create, getById, remove, } from '../db/mongo/posts/post.service';
 import User from '../users/user.model';
 
 export const createPost = async (req, res) => {
@@ -76,13 +76,14 @@ export const updatePost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await getById(req.params.id)
+    
+    // fix
+    // if (!post.user.equals(req.user._id)) {
+    //   return res.sendStatus(HTTPStatus.UNAUTHORIZED);
+    // }
 
-    if (!post.user.equals(req.user._id)) {
-      return res.sendStatus(HTTPStatus.UNAUTHORIZED);
-    }
-
-    await post.remove();
+    await remove(post._id);
     return res.sendStatus(HTTPStatus.OK);
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);

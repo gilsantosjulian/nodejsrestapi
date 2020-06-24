@@ -23,21 +23,30 @@ const save = (key, value) => {
     client.set(key, parsedValue, (err, response) => {
       if (err) console.log('[redis:save]: ', err);
       console.log('[redis:save]: ', response);
-
     })
   }
 }
 
-const findOne = (id) => {
+const findOne = async (id) => {
   if (client) {
-    return client.get(id, (err, response) => {
-      if (err) console.log('[redis:findOne]: ', err);
-      return response
+    return new Promise((resolve, reject) =>{
+      client.get(id, (err, response) => {
+        if(err) return reject(err)
+        resolve(JSON.parse(response))
+      })
     })
   }
 }
 
-const remove = () => {
+const remove = (id) => {
+  if (client) {
+    return new Promise((resolve, reject) => {
+      client.del(id, (err, response) => {
+        if (err) return reject(err)
+        resolve(response)
+      })
+    })
+  }
 
 }
 const update = () => {
