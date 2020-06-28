@@ -3,7 +3,7 @@ import redisMem from '../../memory/index';
 
 const create = async (args, user) => {
   const postCreated = await PostSchema.create({...args, user})
-  redisMem.save(postCreated._id.toString(), {...postCreated})
+  redisMem.save(postCreated._id.toString(), { postCreated })
   return postCreated
 }
 
