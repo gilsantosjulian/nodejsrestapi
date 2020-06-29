@@ -3,7 +3,7 @@ import redisMem from '../../memory/index';
 
 const create = async (args, user) => {
   const postCreated = await PostSchema.create({...args, user})
-  redisMem.save(postCreated._id.toString(), { postCreated })
+  redisMem.save(postCreated._id.toString(), postCreated)
   return postCreated
 }
 
@@ -12,6 +12,11 @@ const getById = async (id) => {
   if (memPost){
     console.log('[redis:getById]: reading from redis');
     return memPost
+  }
+
+  if (!memPost) {
+    console.log('[redis:remove]: not found in redis');
+    return null
   }
   
   const post = await PostSchema.findById(id).populate('user')
@@ -27,17 +32,15 @@ const remove = async (id) => {
     console.log('[redis:remove]: not found in db');
     return null
   }
+
   const postRemoved = await post.remove()
   console.log('[redis:remove]: removing from db');
 
-  if (!postRemoved) {
-    console.log('[redis:remove]: not found in redis');
-    return null
+  if (postRemoved) {
+    const memPost = await redisMem.remove(id)
+    console.log('[redis:remove]: removing from redis');
+    return memPost
   }
-
-  const memPost = await redisMem.remove(id)
-  console.log('[redis:remove]: removing from redis');
-  return memPost
 }
 
 module.exports = {
