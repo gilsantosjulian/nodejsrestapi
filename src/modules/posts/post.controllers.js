@@ -61,13 +61,16 @@ export const getPostsList = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    if (!post.user.equals(req.user._id)) {
-      return res.sendStatus(HTTPStatus.UNAUTHORIZED);
-    }
+    const post = await getById(req.params.id)
+    const userId = req.user._id.toString()
+    if (post.user !== userId)       
+    return res.sendStatus(HTTPStatus.UNAUTHORIZED);
+    
     Object.keys(req.body).forEach(key => {
       post[key] = req.body[key];
     });
+    
+    // TODO -> POST.SAVE()
     return res.status(HTTPStatus.OK).json(await post.save());
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
@@ -77,12 +80,14 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     const post = await getById(req.params.id)
-    
-    // fix
-    // if (!post.user.equals(req.user._id)) {
-    //   return res.sendStatus(HTTPStatus.UNAUTHORIZED);
-    // }
 
+    if (!post)
+      return res.sendStatus(HTTPStatus.NOT_FOUND);
+
+    const userId = req.user._id.toString()
+    if (post.user !== userId) 
+      return res.sendStatus(HTTPStatus.UNAUTHORIZED);
+    
     await remove(post._id);
     return res.sendStatus(HTTPStatus.OK);
   } catch (e) {
