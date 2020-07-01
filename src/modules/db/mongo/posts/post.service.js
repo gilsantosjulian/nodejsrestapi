@@ -20,7 +20,11 @@ const getById = async (id) => {
   }
   
   const post = await PostSchema.findById(id).populate('user')
-  if(!post) return null
+  if (!post) {
+    console.log('[redis:remove]: not found in db');
+    return null
+  }
+
   redisMem.save(post._id.toString(), {...post.toJSON()})
   console.log('[redis:getById]: reading from db');
   return post.toJSON()
@@ -28,11 +32,6 @@ const getById = async (id) => {
 
 const remove = async (id) => {  
   const post = await PostSchema.findById(id)
-  if(!post) {
-    console.log('[redis:remove]: not found in db');
-    return null
-  }
-
   const postRemoved = await post.remove()
   console.log('[redis:remove]: removing from db');
 
@@ -43,8 +42,21 @@ const remove = async (id) => {
   }
 }
 
+export const update = async (id, data) => {
+  const post = await PostSchema.findById(id)
+  Object.keys(data).forEach(key => {
+    post[key] = data[key];
+  });
+  
+  const postUpdated = await post.save()
+  await redisMem.findOne(id);
+  await redisMem.save(id, postUpdated);
+  return postUpdated
+}
+
 module.exports = {
   create,
   getById,
   remove,
+  update,
 }
