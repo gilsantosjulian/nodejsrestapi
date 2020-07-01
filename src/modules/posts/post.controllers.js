@@ -1,6 +1,6 @@
 import HTTPStatus from 'http-status';
 import Post from '../db/mongo/posts/post.model';
-import { create, getById, remove, } from '../db/mongo/posts/post.service';
+import { create, getById, remove, update } from '../db/mongo/posts/post.service';
 import User from '../users/user.model';
 
 export const createPost = async (req, res) => {
@@ -20,6 +20,9 @@ export const getPostById = async (req, res) => {
 
     const favorite = promise[0]._favorites.isPostIsFavorite(req.params.id);
     const post = await getById(req.params.id)
+
+    if (!post)
+      return res.sendStatus(HTTPStatus.NOT_FOUND);
 
     return res.status(HTTPStatus.OK).json({
       ...post,
@@ -61,17 +64,17 @@ export const getPostsList = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
-    const post = await getById(req.params.id)
+    const postId = req.params.id;
     const userId = req.user._id.toString()
+    const post = await getById(req.params.id)
+    if (!post)
+      return res.sendStatus(HTTPStatus.NOT_FOUND);
+
     if (post.user !== userId)       
     return res.sendStatus(HTTPStatus.UNAUTHORIZED);
-    
-    Object.keys(req.body).forEach(key => {
-      post[key] = req.body[key];
-    });
-    
-    // TODO -> POST.SAVE()
-    return res.status(HTTPStatus.OK).json(await post.save());
+
+    const postEdited = await update(postId, req.body);
+    return res.status(HTTPStatus.OK).json(postEdited);
   } catch (e) {
     return res.status(HTTPStatus.BAD_REQUEST).json(e);
   }
@@ -80,7 +83,6 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
   try {
     const post = await getById(req.params.id)
-
     if (!post)
       return res.sendStatus(HTTPStatus.NOT_FOUND);
 
