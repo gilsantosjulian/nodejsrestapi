@@ -61,18 +61,6 @@ PostSchema.methods = {
 };
 
 PostSchema.statics = {
-  list({
-    skip = 0,
-    limit = 5
-  } = {}) {
-    return this.find()
-      .sort({
-        createdAt: -1
-      })
-      .skip(skip)
-      .limit(limit)
-      .populate('user');
-  },
   incFavoriteCount(postId) {
     return this.findByIdAndUpdate(postId, {
       $inc: {
