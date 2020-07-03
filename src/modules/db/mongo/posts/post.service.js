@@ -7,6 +7,14 @@ const create = async (args, user) => {
   return postCreated
 }
 
+const getAll = async (limit=50, skip=0) => {
+  return PostSchema.find()
+  .sort({createdAt: -1})
+  .skip(skip)
+  .skip(limit)
+  .populate('user')
+}
+
 const getById = async (id) => {
   const memPost = await redisMem.findOne(id)
   if (memPost){
@@ -59,4 +67,5 @@ module.exports = {
   getById,
   remove,
   update,
+  getAll,
 }

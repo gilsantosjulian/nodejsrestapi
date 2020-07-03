@@ -1,6 +1,5 @@
 import HTTPStatus from 'http-status';
-import Post from '../db/mongo/posts/post.model';
-import { create, getById, remove, update } from '../db/mongo/posts/post.service';
+import { create, getAll, getById, remove, update } from '../db/mongo/posts/post.service';
 import User from '../users/user.model';
 
 export const createPost = async (req, res) => {
@@ -39,13 +38,10 @@ export const getPostsList = async (req, res) => {
   try {
     const promise = await Promise.all([
       User.findById(req.user._id),
-      Post.list({
-        limit,
-        skip
-      })
     ]);
 
-    const posts = promise[1].reduce((arr, post) => {
+    let posts = await getAll(limit, skip);
+    posts = posts.reduce((arr, post) => {
       const favorite = promise[0]._favorites.isPostIsFavorite(post._id);
 
       arr.push({
